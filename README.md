@@ -54,7 +54,7 @@ cap pm2:stop                       # Stop pm2 application
 Configurable options:
 
 ```ruby
-set :pm2_app_command, 'main'                             # default, runs main.js
+set :pm2_app_command, 'main.js'                          # default
 set :pm2_target_path, -> { release_path.join('subdir') } # default release_path
 set :pm2_roles, :all                                     # default
 set :pm2_env_variables, {}                               # default
