@@ -14,7 +14,7 @@ namespace :pm2 do
 
   def restart_app
     within current_path do
-      execute :pm2, :restart, app_command_with_js_extension
+      execute :pm2, :restart, app_command_without_js_extension
     end
   end
 
@@ -68,9 +68,15 @@ namespace :pm2 do
     run_task :pm2, :start, app_command_with_js_extension
   end
 
+
   desc 'Stop pm2 application'
   task :stop do
     run_task :pm2, :stop, app_command_without_js_extension
+  end
+
+  desc 'Delete pm2 application'
+  task :delete do
+    run_task :pm2, :delete, app_command_without_js_extension
   end
 
   desc 'Show pm2 application info'
