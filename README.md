@@ -1,7 +1,4 @@
-# capistrano-pm2 [![Gem Version](https://badge.fury.io/rb/capistrano-pm2.svg)](http://badge.fury.io/rb/capistrano-pm2)
-This is a pm2 handler for capistrano 3.x.
-
-# Capistrano::pm2
+# Capistrano::pm2 [![Gem Version](https://badge.fury.io/rb/capistrano-pm2.svg)](http://badge.fury.io/rb/capistrano-pm2)
 
 nodejs [pm2](https://github.com/Unitech/pm2) support for Capistrano 3.x
 
