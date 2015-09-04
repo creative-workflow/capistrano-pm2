@@ -83,6 +83,11 @@ namespace :pm2 do
   task :show do
     run_task :pm2, :show, app_command_without_js_extension
   end
+
+  desc 'Install pm2 via npm on the remote host'
+  task :setup do
+    run_task :npm, :install,  'pm2 -g'
+  end
 end
 
 namespace :load do
