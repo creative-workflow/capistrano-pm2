@@ -54,9 +54,9 @@ namespace :pm2 do
 
   before 'deploy:restart', 'pm2:restart'
 
-  desc 'Show pm2 status'
+  desc 'List all pm2 applications'
   task :status do
-    run_task :pm2, :status
+    run_task :pm2, :list
   end
 
   desc 'Start pm2 application'
