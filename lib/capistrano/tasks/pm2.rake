@@ -1,9 +1,13 @@
 require 'json'
 
 namespace :pm2 do
+  def app_name
+    fetch(:pm2_app_name) || fetch(:application)
+  end
+
   def app_status
     within current_path do
-      ps = JSON.parse(capture :pm2, :jlist, fetch(:pm2_app_command))
+      ps = JSON.parse(capture :pm2, :jlist, app_name)
 
       return nil if ps.empty?
 
@@ -14,16 +18,8 @@ namespace :pm2 do
 
   def restart_app
     within current_path do
-      execute :pm2, :restart, app_command_without_js_extension
+      execute :pm2, :restart, app_name
     end
-  end
-
-  def app_command_with_js_extension
-    "#{app_command_without_js_extension}.js"
-  end
-
-  def app_command_without_js_extension
-    fetch(:pm2_app_command).sub(/\.js$/, '')
   end
 
   def run_task(*args)
@@ -65,23 +61,22 @@ namespace :pm2 do
 
   desc 'Start pm2 application'
   task :start do
-    run_task :pm2, :start, app_command_with_js_extension
+    run_task :pm2, :start, fetch(:pm2_app_command), "--name #{app_name} #{fetch(:pm2_start_params)}"
   end
-
 
   desc 'Stop pm2 application'
   task :stop do
-    run_task :pm2, :stop, app_command_without_js_extension
+    run_task :pm2, :stop, app_name
   end
 
   desc 'Delete pm2 application'
   task :delete do
-    run_task :pm2, :delete, app_command_without_js_extension
+    run_task :pm2, :delete, app_name
   end
 
   desc 'Show pm2 application info'
   task :show do
-    run_task :pm2, :show, app_command_without_js_extension
+    run_task :pm2, :show, app_name
   end
 
   desc 'Install pm2 via npm on the remote host'
@@ -92,7 +87,8 @@ end
 
 namespace :load do
   task :defaults do
-    set :pm2_app_command, 'main'
+    set :pm2_app_command, 'main.js'
+    set :pm2_app_name, nil
     set :pm2_roles, :all
     set :pm2_env_variables, {}
   end
