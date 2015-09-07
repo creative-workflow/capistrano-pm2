@@ -1,37 +1,6 @@
 require 'json'
 
 namespace :pm2 do
-  def app_name
-    fetch(:pm2_app_name) || fetch(:application)
-  end
-
-  def app_status
-    within current_path do
-      ps = JSON.parse(capture :pm2, :jlist, app_name)
-
-      return nil if ps.empty?
-
-      # status: online, errored, stopped
-      return ps[0]['pm2_env']['status']
-    end
-  end
-
-  def restart_app
-    within current_path do
-      execute :pm2, :restart, app_name
-    end
-  end
-
-  def run_task(*args)
-    on roles fetch(:pm2_roles) do
-      within fetch(:pm2_target_path, release_path) do
-        with fetch(:pm2_env_variables) do
-          execute(*args)
-        end
-      end
-    end
-  end
-
   desc 'Restart app gracefully'
   task :restart do
     on roles fetch(:pm2_roles) do
@@ -61,8 +30,7 @@ namespace :pm2 do
 
   desc 'Start pm2 application'
   task :start do
-    args = "--name #{app_name} #{fetch(:pm2_start_params)}"
-    run_task :pm2, :start, fetch(:pm2_app_command), args
+    run_task :pm2, :start, fetch(:pm2_app_command), "--name #{app_name} #{fetch(:pm2_start_params)}"
   end
 
   desc 'Stop pm2 application'
@@ -87,7 +55,38 @@ namespace :pm2 do
 
   desc 'Install pm2 via npm on the remote host'
   task :setup do
-    run_task :npm, :install, 'pm2 -g'
+    run_task :npm, :install,  'pm2 -g'
+  end
+
+  def app_name
+    fetch(:pm2_app_name) || fetch(:application)
+  end
+
+  def app_status
+    within current_path do
+      ps = JSON.parse(capture :pm2, :jlist, app_name)
+
+      return nil if ps.empty?
+
+      # status: online, errored, stopped
+      return ps[0]["pm2_env"]["status"]
+    end
+  end
+
+  def restart_app
+    within current_path do
+      execute :pm2, :restart, app_name
+    end
+  end
+
+  def run_task(*args)
+    on roles fetch(:pm2_roles) do
+      within fetch(:pm2_target_path, release_path) do
+        with fetch(:pm2_env_variables) do
+          execute *args
+        end
+      end
+    end
   end
 end
 
