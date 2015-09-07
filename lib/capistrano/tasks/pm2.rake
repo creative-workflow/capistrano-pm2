@@ -94,6 +94,7 @@ namespace :load do
   task :defaults do
     set :pm2_app_command, 'main.js'
     set :pm2_app_name, nil
+    set :pm2_start_params, ''
     set :pm2_roles, :all
     set :pm2_env_variables, {}
   end
