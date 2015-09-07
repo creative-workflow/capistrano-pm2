@@ -79,6 +79,11 @@ namespace :pm2 do
     run_task :pm2, :show, app_name
   end
 
+  desc 'Watch pm2 logs'
+  task :logs do
+    run_task :pm2, :logs
+  end
+
   desc 'Install pm2 via npm on the remote host'
   task :setup do
     run_task :npm, :install,  'pm2 -g'
