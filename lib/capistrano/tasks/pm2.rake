@@ -75,7 +75,7 @@ namespace :pm2 do
   end
 
   desc 'Show pm2 application info'
-  task :show do
+  task :list do
     run_task :pm2, :show, app_name
   end
 
