@@ -44,20 +44,24 @@ end
 
 Available Tasks
 ```ruby
+cap pm2:delete                     # Delete pm2 application
+cap pm2:list                       # Show pm2 application info
+cap pm2:logs                       # Watch pm2 logs
 cap pm2:restart                    # Restart app gracefully
-cap pm2:show                       # Show pm2 application info
+cap pm2:setup                      # Install pm2 via npm on the remote host
 cap pm2:start                      # Start pm2 application
-cap pm2:status                     # Show pm2 status
+cap pm2:status                     # List all pm2 applications
 cap pm2:stop                       # Stop pm2 application
 ```
 
 Configurable options:
-
 ```ruby
-set :pm2_app_command, 'main'                      # default, runs main.js
+set :pm2_app_command, 'main.js'                   # default, runs main.js
+set :pm2_app_name, nil                            # app name for pm2, default cap :application
 set :pm2_target_path, -> { release_path.join('subdir') } # default not set
-set :pm2_roles, :all                              # default
-set :pm2_env_variables, {}                        # default
+set :pm2_roles, :all                              # default, cap roles to run on
+set :pm2_env_variables, {}                        # default, env vars for pm2
+set :pm2_start_params, ''                         # default, pm2 start params see http://pm2.keymetrics.io/docs/usage/quick-start/#cheat-sheet
 ```
 
 ## Contributing
