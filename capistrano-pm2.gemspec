@@ -7,12 +7,12 @@ Gem::Specification.new do |spec|
   spec.version       = '1.0.1'
   spec.authors       = ['Tom Hanoldt']
   spec.email         = ['monotom@gmail.com']
-  spec.description   = %q{nodejs pm2 support for Capistrano 3.x}
-  spec.summary       = %q{nodejs pm2 support for Capistrano 3.x}
+  spec.description   = 'nodejs pm2 support for Capistrano 3.x'
+  spec.summary       = 'nodejs pm2 support for Capistrano 3.x'
   spec.homepage      = 'https://github.com/creative-workflow/capistrano-pm2'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
