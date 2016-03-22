@@ -75,7 +75,7 @@ namespace :pm2 do
 
   def restart_app
     within current_path do
-      execute :pm2, :restart, app_name
+      execute :pm2, :reload, app_name
     end
   end
 
