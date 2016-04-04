@@ -63,7 +63,7 @@ namespace :pm2 do
   end
 
   def app_status
-    within current_path do
+    within fetch(:pm2_target_path, current_path) do
       ps = JSON.parse(capture :pm2, :jlist, app_name)
 
       return nil if ps.empty?
@@ -74,7 +74,7 @@ namespace :pm2 do
   end
 
   def restart_app
-    within current_path do
+    within fetch(:pm2_target_path, current_path) do
       execute :pm2, :reload, app_name
     end
   end
