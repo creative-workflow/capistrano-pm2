@@ -64,12 +64,17 @@ namespace :pm2 do
 
   def app_status
     within current_path do
-      ps = JSON.parse(capture :pm2, :jlist, app_name)
+      ps = JSON.parse(capture :pm2, :jlist)
 
-      return nil if ps.empty?
+      # find the process with our app name
+      ps.each do |child|
+        if child['name'] == app_name
+          # status: online, errored, stopped
+          return child['pm2_env']['status']
+        end
+      end
 
-      # status: online, errored, stopped
-      return ps[0]["pm2_env"]["status"]
+      return nil
     end
   end
 
