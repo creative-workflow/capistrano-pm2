@@ -53,6 +53,11 @@ namespace :pm2 do
     run_task :pm2, :logs
   end
 
+  desc 'Save pm2 state so it can be loaded after restart'
+  task :save do
+    run_task :pm2, :save
+  end
+
   desc 'Install pm2 via npm on the remote host'
   task :setup do
     run_task :npm, :install,  'pm2 -g'
