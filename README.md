@@ -52,6 +52,7 @@ cap pm2:setup                      # Install pm2 via npm on the remote host
 cap pm2:start                      # Start pm2 application
 cap pm2:status                     # List all pm2 applications
 cap pm2:stop                       # Stop pm2 application
+cap pm2:save                       # Save pm2 state so it can be loaded after restart
 ```
 
 Configurable options:
