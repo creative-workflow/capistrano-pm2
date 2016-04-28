@@ -23,6 +23,13 @@ namespace :pm2 do
 
   before 'deploy:restart', 'pm2:restart'
 
+  desc 'Start or gracefully reaload app'
+  task :start_or_graceful_reload do
+    on roles fetch(:pm2_roles) do
+      run_task :pm2, :startOrGracefulReload, fetch(:pm2_app_command), "--name #{app_name} #{fetch(:pm2_start_params)}"
+    end
+  end
+
   desc 'List all pm2 applications'
   task :status do
     run_task :pm2, :list
