@@ -57,12 +57,12 @@ cap pm2:save                       # Save pm2 state so it can be loaded after re
 
 Configurable options:
 ```ruby
-set :pm2_app_command, 'main.js'                   # default, runs main.js
-set :pm2_app_name, nil                            # app name for pm2, default cap :application
-set :pm2_target_path, -> { release_path.join('subdir') } # default not set
-set :pm2_roles, :all                              # default, cap roles to run on
-set :pm2_env_variables, {}                        # default, env vars for pm2
-set :pm2_start_params, ''                         # default, pm2 start params see http://pm2.keymetrics.io/docs/usage/quick-start/#cheat-sheet
+set :pm2_app_command, 'main.js'                   # the main program
+set :pm2_app_name, fetch(:application)            # name for pm2 app
+set :pm2_target_path, -> { release_path }         # where to run pm2 commands
+set :pm2_roles, :all                              # server roles where pm2 runs on
+set :pm2_env_variables, {}                        # default: env vars for pm2
+set :pm2_start_params, ''                         # pm2 start params see http://pm2.keymetrics.io/docs/usage/quick-start/#cheat-sheet
 ```
 
 ## Contributing
