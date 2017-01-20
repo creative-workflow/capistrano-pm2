@@ -9,6 +9,7 @@ namespace :pm2 do
       end
     end
   end
+  task :restart => :start_or_graceful_reload
 
   desc 'List all pm2 applications'
   task :status do
