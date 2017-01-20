@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'capistrano-pm2'
-  spec.version       = '1.0.3'
+  spec.version       = '2.0.0'
   spec.authors       = ['Tom Hanoldt']
   spec.email         = ['monotom@gmail.com']
   spec.description   = 'nodejs pm2 support for Capistrano 3.x'
   spec.summary       = 'nodejs pm2 support for Capistrano 3.x'
-  spec.homepage      = 'https://github.com/creative-workflow/capistrano-pm2'
+  spec.homepage      = 'https://github.com/HeadspaceMeditation/capistrano-pm2'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
