@@ -1,28 +1,6 @@
 require 'json'
 
 namespace :pm2 do
-  desc 'Restart app gracefully'
-  task :restart do
-    on roles fetch(:pm2_roles) do
-      case app_status
-      when nil
-        info 'App is not registerd'
-        invoke 'pm2:start'
-      when 'stopped'
-        info 'App is stopped'
-        restart_app
-      when 'errored'
-        info 'App has errored'
-        restart_app
-      when 'online'
-        info 'App is online'
-        restart_app
-      end
-    end
-  end
-
-  before 'deploy:restart', 'pm2:restart'
-
   desc 'Start or gracefully reaload app'
   task :start_or_graceful_reload do
     on roles fetch(:pm2_roles) do
