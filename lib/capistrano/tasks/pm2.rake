@@ -69,7 +69,7 @@ namespace :pm2 do
 
   def app_status
     within current_path do
-      ps = JSON.parse(capture :pm2, :jlist)
+      ps = JSON.parse(capture :pm2, :jlist, :'-s')
 
       # find the process with our app name
       ps.each do |child|
