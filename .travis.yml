@@ -1,0 +1,17 @@
+language: node_js
+
+node_js:
+  - "node"
+  - "iojs"
+
+before_install:
+  - rvm install 2.3.1
+  - gem install bundler
+  - npm install pm2 -g
+
+install:
+  - cd test && bundle install
+  - cd test && npm install
+
+script:
+  - ruby ./test/test.rb

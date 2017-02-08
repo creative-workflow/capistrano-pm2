@@ -9,6 +9,8 @@
 /test/version_tmp/
 /tmp/
 
+node_modules
+
 ## Specific to RubyMotion:
 .dat*
 .repl_history
