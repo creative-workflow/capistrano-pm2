@@ -4,8 +4,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'capistrano-pm2'
-  spec.version       = '1.0.4'
-  spec.authors       = ['Tom Hanoldt']
+  spec.version       = '2.0.0'
+  spec.authors       = ['Tom Hanoldt', 'Eli Goodman', 'Phu Huynh', 'Shamsundar Dileep']
   spec.email         = ['monotom@gmail.com']
   spec.description   = 'nodejs pm2 support for Capistrano 3.x'
   spec.summary       = 'nodejs pm2 support for Capistrano 3.x'

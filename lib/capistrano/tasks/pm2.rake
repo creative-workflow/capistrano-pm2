@@ -1,27 +1,18 @@
 require 'json'
 
 namespace :pm2 do
-  desc 'Restart app gracefully'
-  task :restart do
+  desc 'Start or gracefully reaload app'
+  task :start_or_graceful_reload do
     on roles fetch(:pm2_roles) do
-      case app_status
-      when nil
-        info 'App is not registerd'
-        invoke 'pm2:start'
-      when 'stopped'
-        info 'App is stopped'
-        restart_app
-      when 'errored'
-        info 'App has errored'
-        restart_app
-      when 'online'
-        info 'App is online'
-        restart_app
+      app_names.each do |app_name|
+        start_params = "--name #{app_name} #{fetch(:pm2_start_params)}"
+        app_command  = fetch(:pm2_app_command)
+
+        run_task :pm2, :startOrGracefulReload, app_command, start_params
       end
     end
   end
-
-  before 'deploy:restart', 'pm2:restart'
+  task :restart => :start_or_graceful_reload
 
   desc 'List all pm2 applications'
   task :status do
@@ -30,22 +21,24 @@ namespace :pm2 do
 
   desc 'Start pm2 application'
   task :start do
-    run_task :pm2, :start, fetch(:pm2_app_command), "--name #{app_name} #{fetch(:pm2_start_params)}"
+    app_names.each do |app_name|
+      run_task :pm2, :start, fetch(:pm2_app_command), "--name #{app_name} #{fetch(:pm2_start_params)}"
+    end
   end
 
   desc 'Stop pm2 application'
   task :stop do
-    run_task :pm2, :stop, app_name
+    app_names.each {|app_name| run_task :pm2, :stop, app_name}
   end
 
   desc 'Delete pm2 application'
   task :delete do
-    run_task :pm2, :delete, app_name
+    app_names.each {|app_name| run_task :pm2, :delete, app_name}
   end
 
   desc 'Show pm2 application info'
   task :list do
-    run_task :pm2, :show, app_name
+    app_names.each {|app_name| run_task :pm2, :show, app_name}
   end
 
   desc 'Watch pm2 logs'
@@ -63,29 +56,17 @@ namespace :pm2 do
     run_task :npm, :install,  'pm2 -g'
   end
 
+  def app_names
+    fetch(:pm2_app_names) || [app_name]
+  end
+
   def app_name
     fetch(:pm2_app_name) || fetch(:application)
   end
 
-  def app_status
-    within current_path do
-      ps = JSON.parse(capture :pm2, :jlist, :'-s')
-
-      # find the process with our app name
-      ps.each do |child|
-        if child['name'] == app_name
-          # status: online, errored, stopped
-          return child['pm2_env']['status']
-        end
-      end
-
-      return nil
-    end
-  end
-
   def restart_app
-    within current_path do
-      execute :pm2, :restart, app_name
+    within fetch(:pm2_target_path, current_path) do
+      app_names.each {|app_name| execute :pm2, :reload, app_name}
     end
   end
 
@@ -104,6 +85,7 @@ namespace :load do
   task :defaults do
     set :pm2_app_command, 'main.js'
     set :pm2_app_name, nil
+    set :pm2_app_names, nil
     set :pm2_start_params, ''
     set :pm2_roles, :all
     set :pm2_env_variables, {}
