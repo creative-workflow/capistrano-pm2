@@ -68,7 +68,7 @@ namespace :pm2 do
   end
 
   def app_status
-    within current_path do
+    within release_path do
       ps = JSON.parse(capture :pm2, :jlist, :'-s')
 
       # find the process with our app name
@@ -84,7 +84,7 @@ namespace :pm2 do
   end
 
   def restart_app
-    within current_path do
+    within release_path do
       execute :pm2, :restart, app_name
     end
   end
