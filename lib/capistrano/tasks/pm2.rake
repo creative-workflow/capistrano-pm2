@@ -69,23 +69,27 @@ namespace :pm2 do
 
   def app_status
     within release_path do
-      ps = JSON.parse(capture :pm2, :jlist, :'-s')
+      with fetch(:pm2_env_variables) do
+        ps = JSON.parse(capture :pm2, :jlist, :'-s')
 
-      # find the process with our app name
-      ps.each do |child|
-        if child['name'] == app_name
-          # status: online, errored, stopped
-          return child['pm2_env']['status']
+        # find the process with our app name
+        ps.each do |child|
+          if child['name'] == app_name
+            # status: online, errored, stopped
+            return child['pm2_env']['status']
+          end
         end
-      end
 
-      return nil
+        return nil
+      end
     end
   end
 
   def restart_app
     within release_path do
-      execute :pm2, :restart, app_name
+      with fetch(:pm2_env_variables) do
+        execute :pm2, :restart, app_name
+      end
     end
   end
 
