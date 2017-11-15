@@ -68,7 +68,7 @@ namespace :pm2 do
   end
 
   def app_status
-    within current_path do
+    within release_path do
       with fetch(:pm2_env_variables) do
         ps = JSON.parse(capture :pm2, :jlist, :'-s')
 
@@ -86,7 +86,7 @@ namespace :pm2 do
   end
 
   def restart_app
-    within current_path do
+    within release_path do
       with fetch(:pm2_env_variables) do
         execute :pm2, :restart, app_name
       end
