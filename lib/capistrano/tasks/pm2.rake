@@ -30,7 +30,7 @@ namespace :pm2 do
 
   desc 'Start pm2 application'
   task :start do
-    run_task :pm2, :start, fetch(:pm2_app_command), "--name #{app_name} #{fetch(:pm2_start_params)}"
+    run_task :pm2, :start, fetch(:pm2_app_command), "--cwd #{current_path} --name #{app_name} #{fetch(:pm2_start_params)}"
   end
 
   desc 'Stop pm2 application'
