@@ -108,6 +108,14 @@ namespace :pm2 do
     end
   end
 
+  def script_or_config
+    if fetch(:pm2_config_path).empty?
+      fetch(:pm2_app_command)
+    else
+      fetch(:pm2_config_path)
+    end
+  end
+
   def run_task(*args)
     on roles fetch(:pm2_roles) do
       within fetch(:pm2_target_path, release_path) do
