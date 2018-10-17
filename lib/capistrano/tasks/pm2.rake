@@ -90,8 +90,9 @@ namespace :load do
     set :pm2_app_name, nil
     set :pm2_config_path, ''
     set :pm2_options, -> {
-      opts = "--cwd #{current_path}"
-      opts += "--name #{app_name}" if fetch(:pm2_config_path).empty?
+      opts = "--cwd #{fetch(:current_path)}"
+      opts += "--name #{fetch(:pm2_app_name) || fetch(:application)}" \
+        if fetch(:pm2_config_path).empty?
       opts
     }
     set :pm2_roles, :all
