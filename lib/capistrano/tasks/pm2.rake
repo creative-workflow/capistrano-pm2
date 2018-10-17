@@ -1,27 +1,5 @@
-require 'json'
-
 namespace :pm2 do
-  desc 'Restart app gracefully'
-  task :restart do
-    on roles fetch(:pm2_roles) do
-      case app_status
-      when nil
-        info 'App is not registerd'
-        invoke 'pm2:start'
-      when 'stopped'
-        info 'App is stopped'
-        restart_app
-      when 'errored'
-        info 'App has errored'
-        restart_app
-      when 'online'
-        info 'App is online'
-        restart_app
-      end
-    end
-  end
-
-  before 'deploy:restart', 'pm2:restart'
+  after 'deploy:publishing', 'pm2:start_or_reload'
 
   desc 'List all pm2 applications'
   task :status do
@@ -30,7 +8,12 @@ namespace :pm2 do
 
   desc 'Start pm2 application'
   task :start do
-    run_task :pm2, :start, fetch(:pm2_app_command), "--cwd #{current_path} --name #{app_name} #{fetch(:pm2_start_params)}"
+    run_task :pm2, :start, script_or_config, fetch(:pm2_options)
+  end
+
+  desc 'Restart pm2 application'
+  task :restart do
+    run_task :pm2, :restart, script_or_config, fetch(:pm2_options)
   end
 
   desc 'Reload pm2 application'
@@ -82,32 +65,6 @@ namespace :pm2 do
     fetch(:pm2_app_name) || fetch(:application)
   end
 
-  def app_status
-    within release_path do
-      with fetch(:pm2_env_variables) do
-        ps = JSON.parse(capture :pm2, :jlist, :'-s')
-
-        # find the process with our app name
-        ps.each do |child|
-          if child['name'] == app_name
-            # status: online, errored, stopped
-            return child['pm2_env']['status']
-          end
-        end
-
-        return nil
-      end
-    end
-  end
-
-  def restart_app
-    within release_path do
-      with fetch(:pm2_env_variables) do
-        execute :pm2, :restart, app_name
-      end
-    end
-  end
-
   def script_or_config
     if fetch(:pm2_config_path).empty?
       fetch(:pm2_app_command)
@@ -131,7 +88,6 @@ namespace :load do
   task :defaults do
     set :pm2_app_command, 'main.js'
     set :pm2_app_name, nil
-    set :pm2_start_params, ''
     set :pm2_config_path, ''
     set :pm2_options, -> {
       opts = "--cwd #{current_path}"
