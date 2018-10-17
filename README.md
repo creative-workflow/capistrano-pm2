@@ -27,29 +27,17 @@ Require in `Capfile` to use the default task:
 require 'capistrano/pm2'
 ```
 
-The task will run before `deploy:restart` as part of Capistrano's default deploy,
-or can be run in isolation with `cap production pm2:restart`. You can also invoke it in your `deploy.rb`:
-```ruby
-namespace :deploy do
-  desc 'Restart application'
-  task :restart do
-    # invoke 'npm:install'
-    invoke 'pm2:restart'
-  end
-
-  after :publishing, :restart
-end
-```
-
-
 Available Tasks
 ```ruby
 cap pm2:delete                     # Delete pm2 application
 cap pm2:list                       # Show pm2 application info
 cap pm2:logs                       # Watch pm2 logs
-cap pm2:restart                    # Restart app gracefully
+cap pm2:reload                     # Reload app gracefully
+cap pm2:restart                    # Restart app
 cap pm2:setup                      # Install pm2 via npm on the remote host
 cap pm2:start                      # Start pm2 application
+cap pm2:start_or_reload            # Start or gracefully reload pm2 application
+cap pm2:start_or_restart           # Start or restart pm2 application
 cap pm2:status                     # List all pm2 applications
 cap pm2:stop                       # Stop pm2 application
 cap pm2:save                       # Save pm2 state so it can be loaded after restart
@@ -62,7 +50,8 @@ set :pm2_app_name, fetch(:application)            # name for pm2 app
 set :pm2_target_path, -> { release_path }         # where to run pm2 commands
 set :pm2_roles, :all                              # server roles where pm2 runs on
 set :pm2_env_variables, {}                        # default: env vars for pm2
-set :pm2_start_params, ''                         # pm2 start params see http://pm2.keymetrics.io/docs/usage/quick-start/#cheat-sheet
+set :pm2_config_path, ''                          # pm2 ecosystem file path
+set :pm2_options, -> { "--cwd #{fetch(:current_path)} --name #{fetch(:application)}" } # options for pm2 CLI
 ```
 
 ## Contributing
