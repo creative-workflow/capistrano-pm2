@@ -125,7 +125,11 @@ namespace :load do
     set :pm2_app_name, nil
     set :pm2_start_params, ''
     set :pm2_config_path, ''
-    set :pm2_options, -> { "--cwd #{current_path} }
+    set :pm2_options, -> {
+      opts = "--cwd #{current_path}"
+      opts += "--name #{app_name}" if fetch(:pm2_config_path).empty?
+      opts
+    }
     set :pm2_roles, :all
     set :pm2_env_variables, {}
   end
